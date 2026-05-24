@@ -34,7 +34,7 @@
         .match-btn.selected {
             background-color: #3b82f6;
             color: white;
-            border-color: #60afa;
+            border-color: #60a5fa;
             transform: scale(1.02);
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
@@ -523,7 +523,7 @@
             while (currentIndex !== 0) {
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[randomIndex]];
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
             }
             return array;
         }
@@ -545,13 +545,13 @@
             const currentFraction = cyclePositionDays / LUNAR_CYCLE;
 
             const phases = [
-                { name: 'New Moon', emoji: '🌑', lower: 0.9375, upper: 0.0625 },
+                { name: 'New Moon',        emoji: '🌑', lower: 0.9375, upper: 0.0625 },
                 { name: 'Waxing Crescent', emoji: '🌒', lower: 0.0625, upper: 0.1875 },
-                { name: 'First Quarter', emoji: '🌓', lower: 0.1875, upper: 0.3125 },
-                { name: 'Waxing Gibbous', emoji: '🌔', lower: 0.3125, upper: 0.4375 },
-                { name: 'Full Moon', emoji: '🌕', lower: 0.4375, upper: 0.5625 },
-                { name: 'Waning Gibbous', emoji: '🌖', lower: 0.5625, upper: 0.6875 },
-                { name: 'Last Quarter', emoji: '🌗', lower: 0.6875, upper: 0.8125 },
+                { name: 'First Quarter',   emoji: '🌓', lower: 0.1875, upper: 0.3125 },
+                { name: 'Waxing Gibbous',  emoji: '🌔', lower: 0.3125, upper: 0.4375 },
+                { name: 'Full Moon',       emoji: '🌕', lower: 0.4375, upper: 0.5625 },
+                { name: 'Waning Gibbous',  emoji: '🌖', lower: 0.5625, upper: 0.6875 },
+                { name: 'Last Quarter',    emoji: '🌗', lower: 0.6875, upper: 0.8125 },
                 { name: 'Waning Crescent', emoji: '🌘', lower: 0.8125, upper: 0.9375 }
             ];
 
