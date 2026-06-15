@@ -125,7 +125,7 @@
     <header class="w-full max-w-4xl mb-8 text-center">
         <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-2 tracking-wide">
             <span class="text-blue-400">🌕</span> Lunar Cycle Guide <span class="text-blue-400">🌑</span>
-            <span class="ml-2 text-xs align-middle text-slate-400">Version 2.0</span>
+            <span class="ml-2 text-xs align-middle text-slate-400">Version 3.0</span>
         </h1>
 
         <p class="text-slate-400 mb-3 text-sm sm:text-base">Master the Spanish translations of moon phases and traditional agricultural activities.</p>
@@ -133,18 +133,13 @@
         <!-- Inline moon info bar, placed right below the subtitle -->
         <div class="moon-info-bar" id="moon-info-bar">
             <div class="moon-info-item">
-                <span class="moon-info-label">Date</span>
-                <span class="moon-info-value" id="moon-current-date">—</span>
-            </div>
-            <div class="moon-info-dot"></div>
-            <div class="moon-info-item">
-                <span class="moon-info-label">Phase</span>
-                <span class="moon-info-value" id="moon-current-phase">—</span>
+                <span class="moon-info-label">Today's Moon</span>
+                <span class="moon-info-value" id="moon-today">—</span>
             </div>
             <div class="moon-info-dot"></div>
             <div class="moon-info-item">
                 <span class="moon-info-label">Phase started</span>
-                <span class="moon-info-value" id="moon-phase-start">—</span>
+                <span class="moon-info-value" id="moon-phase-start-inline">—</span>
             </div>
         </div>
 
@@ -431,7 +426,7 @@
                     btnA.classList.remove('selected'); btnB.classList.remove('selected');
                     btnA.classList.add('incorrect'); btnB.classList.add('incorrect');
                     setTimeout(() => { btnA.classList.remove('incorrect'); btnB.classList.remove('incorrect'); resetSelection(); }, 500);
-                }, 100);
+                }, 500);
             }
         }
 
@@ -443,7 +438,7 @@
 
         function resetSelection() { selectedA = null; selectedB = null; isAnimating = false; }
 
-        // ─── UTILS ───────────────────────────────────────────────────────────────
+        // ─── UTILS ─────────────────────────────────────────────────────────────--
         function shuffleArray(array) {
             let ci = array.length, ri;
             while (ci !== 0) { ri = Math.floor(Math.random() * ci); ci--; [array[ci], array[ri]] = [array[ri], array[ci]]; }
@@ -457,8 +452,8 @@
         // ─── MOON PHASE MATH ─────────────────────────────────────────────────────
         function computeMoonInfo() {
             // Constants
-            const LUNAR_CYCLE  = 29.530588853;                          // days
-            const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0)); // Jan 6 2000 18:14 UTC
+            const LUNAR_CYCLE  = 29.530588853;                              // days
+            const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));  // Jan 6 2000 18:14 UTC
             const now          = new Date();
             const msPerDay     = 1000 * 60 * 60 * 24;
 
@@ -480,7 +475,6 @@
                 { name: 'Waning Crescent', emoji: '🌘', lower: 0.8125, upper: 0.9375 }
             ];
 
-            // Helper: handles the wrapped New Moon segment (lower > upper)
             function isInPhase(f, lower, upper) {
                 return lower < upper ? (f >= lower && f < upper) : (f >= lower || f < upper);
             }
@@ -494,15 +488,16 @@
             }
 
             // Step 3 ─ how many days ago this phase started
-            // Adding 1 before % 1 keeps the result positive when currentFraction < lower
             const cycleElapsed  = (currentFraction - currentPhase.lower + 1) % 1;
             const daysElapsed   = cycleElapsed * LUNAR_CYCLE;
             const phaseStartDate = new Date(now.getTime() - daysElapsed * msPerDay);
 
-            // Render
-            document.getElementById('moon-current-date').textContent  = formatNiceDate(now);
-            document.getElementById('moon-current-phase').textContent = `${currentPhase.name} ${currentPhase.emoji}`;
-            document.getElementById('moon-phase-start').textContent   = formatNiceDate(phaseStartDate);
+            // Build inline string: "Today's Moon:🌑New MoonJun 15, 2026  Phase started Saturday, June 13, 2026"
+            const todayStr      = now.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            const phaseStartStr = formatNiceDate(phaseStartDate);
+
+            document.getElementById('moon-today').textContent           = `Today's Moon: ${currentPhase.emoji}${currentPhase.name}${todayStr}`;
+            document.getElementById('moon-phase-start-inline').textContent = phaseStartStr;
         }
 
         // ─── INIT ────────────────────────────────────────────────────────────────
