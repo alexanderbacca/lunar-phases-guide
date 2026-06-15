@@ -134,12 +134,12 @@
         <div class="moon-info-bar" id="moon-info-bar">
             <div class="moon-info-item">
                 <span class="moon-info-label">Today's Moon</span>
-                <span class="moon-info-value" id="moon-today">—</span>
+                <span class="moon-info-value" id="moon-today-line">—</span>
             </div>
             <div class="moon-info-dot"></div>
             <div class="moon-info-item">
                 <span class="moon-info-label">Phase started</span>
-                <span class="moon-info-value" id="moon-phase-start-inline">—</span>
+                <span class="moon-info-value" id="moon-phase-start-line">—</span>
             </div>
         </div>
 
@@ -438,7 +438,7 @@
 
         function resetSelection() { selectedA = null; selectedB = null; isAnimating = false; }
 
-        // ─── UTILS ─────────────────────────────────────────────────────────────--
+        // ─── UTILS ───────────────────────────────────────────────────────────────
         function shuffleArray(array) {
             let ci = array.length, ri;
             while (ci !== 0) { ri = Math.floor(Math.random() * ci); ci--; [array[ci], array[ri]] = [array[ri], array[ci]]; }
@@ -449,55 +449,50 @@
             return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        // ─── MOON PHASE MATH ─────────────────────────────────────────────────────
+        // ─── MOON PHASE MATH (4-PHASE VERSION) ──────────────────────────────────
         function computeMoonInfo() {
-            // Constants
-            const LUNAR_CYCLE  = 29.530588853;                              // days
-            const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));  // Jan 6 2000 18:14 UTC
+            // Algorithm based on days since a known new moon and the synodic month ~29.530588853 days.[web:20][web:21]
+            const LUNAR_CYCLE  = 29.530588853;
+            const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
             const now          = new Date();
             const msPerDay     = 1000 * 60 * 60 * 24;
 
-            // Step 1 ─ fractional position in current cycle (0 = new moon, 0.5 = full moon)
             const daysSinceKnownNewMoon = (now.getTime() - knownNewMoon.getTime()) / msPerDay;
             let   cyclePositionDays     = daysSinceKnownNewMoon % LUNAR_CYCLE;
-            if (cyclePositionDays < 0) cyclePositionDays += LUNAR_CYCLE;  // guard against negative modulo
+            if (cyclePositionDays < 0) cyclePositionDays += LUNAR_CYCLE;
             const currentFraction = cyclePositionDays / LUNAR_CYCLE;
 
-            // Step 2 ─ 8-phase table with exact fraction boundaries
-            const phases = [
-                { name: 'New Moon',        emoji: '🌑', lower: 0.9375, upper: 0.0625 }, // wraps across 1→0
-                { name: 'Waxing Crescent', emoji: '🌒', lower: 0.0625, upper: 0.1875 },
-                { name: 'First Quarter',   emoji: '🌓', lower: 0.1875, upper: 0.3125 },
-                { name: 'Waxing Gibbous',  emoji: '🌔', lower: 0.3125, upper: 0.4375 },
-                { name: 'Full Moon',       emoji: '🌕', lower: 0.4375, upper: 0.5625 },
-                { name: 'Waning Gibbous',  emoji: '🌖', lower: 0.5625, upper: 0.6875 },
-                { name: 'Last Quarter',    emoji: '🌗', lower: 0.6875, upper: 0.8125 },
-                { name: 'Waning Crescent', emoji: '🌘', lower: 0.8125, upper: 0.9375 }
-            ];
-
-            function isInPhase(f, lower, upper) {
-                return lower < upper ? (f >= lower && f < upper) : (f >= lower || f < upper);
+            // Map to 4 phases only.
+            // 0.00–0.25  -> New Moon (🌑)
+            // 0.25–0.50  -> Waxing Moon (🌒)
+            // 0.50–0.75  -> Full Moon (🌕)
+            // 0.75–1.00  -> Waning Moon (🌘)[web:25][web:26]
+            let currentPhase;
+            if (currentFraction < 0.25) {
+                currentPhase = { name: 'New Moon',   emoji: '🌑', startFrac: 0.0 };
+            } else if (currentFraction < 0.5) {
+                currentPhase = { name: 'Waxing Moon', emoji: '🌒', startFrac: 0.25 };
+            } else if (currentFraction < 0.75) {
+                currentPhase = { name: 'Full Moon',   emoji: '🌕', startFrac: 0.5 };
+            } else {
+                currentPhase = { name: 'Waning Moon', emoji: '🌘', startFrac: 0.75 };
             }
 
-            let currentPhase = phases[0];
-            for (const phase of phases) {
-                if (isInPhase(currentFraction, phase.lower, phase.upper)) {
-                    currentPhase = phase;
-                    break;
-                }
-            }
-
-            // Step 3 ─ how many days ago this phase started
-            const cycleElapsed  = (currentFraction - currentPhase.lower + 1) % 1;
-            const daysElapsed   = cycleElapsed * LUNAR_CYCLE;
+            // How many days into this 4-phase segment we are.
+            const segmentLength = LUNAR_CYCLE / 4;
+            const segmentIndex  = Math.floor(currentFraction * 4);
+            const segmentStartDays = segmentIndex * segmentLength;
+            const daysElapsed   = cyclePositionDays - segmentStartDays;
             const phaseStartDate = new Date(now.getTime() - daysElapsed * msPerDay);
 
-            // Build inline string: "Today's Moon:🌑New MoonJun 15, 2026  Phase started Saturday, June 13, 2026"
             const todayStr      = now.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
             const phaseStartStr = formatNiceDate(phaseStartDate);
 
-            document.getElementById('moon-today').textContent           = `Today's Moon: ${currentPhase.emoji}${currentPhase.name}${todayStr}`;
-            document.getElementById('moon-phase-start-inline').textContent = phaseStartStr;
+            // Final strings with spacing:
+            // "Today's Moon: 🌑 New Moon — Jun 15, 2026"
+            // "Phase started: Saturday, June 13, 2026"
+            document.getElementById('moon-today-line').textContent      = `Today's Moon: ${currentPhase.emoji} ${currentPhase.name} — ${todayStr}`;
+            document.getElementById('moon-phase-start-line').textContent = `Phase started: ${phaseStartStr}`;
         }
 
         // ─── INIT ────────────────────────────────────────────────────────────────
