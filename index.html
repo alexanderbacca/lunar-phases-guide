@@ -124,23 +124,27 @@
     <!-- Header & Navigation -->
     <header class="w-full max-w-4xl mb-8 text-center">
         <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-2 tracking-wide">
-            <span class="text-blue-400">🌕</span> Lunar Cycle Guide <span class="text-blue-400">🌑</span>
-            <span class="ml-2 text-xs align-middle text-slate-400">Version 3.0</span>
+            <span class="text-blue-400">🌕</span> <span id="app-title">Lunar Cycle Guide</span> <span class="text-blue-400">🌑</span>
+            <span class="ml-2 text-xs align-middle text-slate-400">Version 4.2</span>
         </h1>
 
-        <p class="text-slate-400 mb-3 text-sm sm:text-base">Master the Spanish translations of moon phases and traditional agricultural activities.</p>
+        <p id="app-subtitle" class="text-slate-400 mb-3 text-sm sm:text-base">Master the Spanish translations of moon phases and traditional agricultural activities.</p>
 
         <!-- Inline moon info bar, placed right below the subtitle -->
         <div class="moon-info-bar" id="moon-info-bar">
             <div class="moon-info-item">
-                <span class="moon-info-label">Today's Moon</span>
+                <span class="moon-info-label" id="moon-today-label">Today's Moon</span>
                 <span class="moon-info-value" id="moon-today-line">—</span>
             </div>
             <div class="moon-info-dot"></div>
             <div class="moon-info-item">
-                <span class="moon-info-label">Phase started</span>
+                <span class="moon-info-label" id="moon-phase-start-label">Phase started</span>
                 <span class="moon-info-value" id="moon-phase-start-line">—</span>
             </div>
+        </div>
+
+        <div class="flex justify-center mb-4">
+            <button id="language-toggle" onclick="toggleLanguage()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold py-2 px-5 rounded-full transition-colors border border-indigo-400/40 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-300" aria-label="Switch interface language to Spanish">Español</button>
         </div>
 
         <nav class="flex justify-center flex-wrap gap-2 sm:gap-4 bg-slate-800 p-2 rounded-xl border border-slate-700 shadow-lg">
@@ -161,9 +165,9 @@
         <!-- 2. QUIZ SECTION -->
         <section id="quiz" class="tab-content bg-slate-800 rounded-2xl p-6 sm:p-8 border border-slate-700 shadow-xl">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold text-blue-300">Knowledge Check</h2>
+                <h2 id="quiz-title" class="text-2xl font-semibold text-blue-300">Knowledge Check</h2>
                 <div class="text-lg font-bold bg-slate-900 py-1 px-4 rounded-full border border-slate-700">
-                    Score: <span id="quiz-score" class="text-blue-400">0</span> / <span id="quiz-total">0</span>
+                    <span id="quiz-score-label">Score:</span> <span id="quiz-score" class="text-blue-400">0</span> / <span id="quiz-total">0</span>
                 </div>
             </div>
             <div id="quiz-container">
@@ -174,22 +178,22 @@
                 </div>
             </div>
             <div id="quiz-end" class="hidden text-center py-8">
-                <h3 class="text-3xl font-bold text-white mb-4">Quiz Complete!</h3>
-                <p class="text-xl text-slate-300 mb-8">Final Score: <span id="final-score" class="text-blue-400 font-bold"></span></p>
-                <button onclick="initQuiz()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-all focus:outline-none shadow-lg">Retake Quiz ↺</button>
+                <h3 id="quiz-complete-title" class="text-3xl font-bold text-white mb-4">Quiz Complete!</h3>
+                <p class="text-xl text-slate-300 mb-8"><span id="final-score-label">Final Score:</span> <span id="final-score" class="text-blue-400 font-bold"></span></p>
+                <button id="retake-quiz-btn" onclick="initQuiz()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-all focus:outline-none shadow-lg">Retake Quiz ↺</button>
             </div>
         </section>
 
         <!-- 3. MATCHING GAME SECTION -->
         <section id="match" class="tab-content bg-slate-800 rounded-2xl p-4 sm:p-8 border border-slate-700 shadow-xl">
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                <h2 class="text-2xl font-semibold text-blue-300">Term Matcher</h2>
-                <p class="text-slate-400 text-sm">Match the English term (Left) with the Spanish term (Right)</p>
-                <button onclick="initMatchGame()" class="bg-slate-700 hover:bg-slate-600 text-white py-1 px-4 rounded-lg transition-colors border border-slate-600">Reset Game ↺</button>
+                <h2 id="match-title" class="text-2xl font-semibold text-blue-300">Term Matcher</h2>
+                <p id="match-instructions" class="text-slate-400 text-sm">Match the English term (Left) with the Spanish term (Right)</p>
+                <button id="reset-match-btn" onclick="initMatchGame()" class="bg-slate-700 hover:bg-slate-600 text-white py-1 px-4 rounded-lg transition-colors border border-slate-600">Reset Game ↺</button>
             </div>
             <div id="match-victory" class="hidden text-center py-12 mb-4 bg-slate-900 rounded-xl border border-emerald-500/30">
-                <h3 class="text-3xl font-bold text-emerald-400 mb-4">🎉 Perfect Match! 🎉</h3>
-                <button onclick="initMatchGame()" class="mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded-lg transition-all focus:outline-none">Play Again</button>
+                <h3 id="match-victory-title" class="text-3xl font-bold text-emerald-400 mb-4">🎉 Perfect Match! 🎉</h3>
+                <button id="play-again-btn" onclick="initMatchGame()" class="mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded-lg transition-all focus:outline-none">Play Again</button>
             </div>
             <div id="match-board" class="grid grid-cols-2 gap-2 sm:gap-6 relative">
                 <div id="match-col-a" class="flex flex-col gap-3"></div>
@@ -200,8 +204,8 @@
     </main>
 
     <footer class="mt-12 text-slate-500 text-sm text-center flex justify-between items-center max-w-4xl w-full px-4">
-        <p>Created by Alexander Bacca, Gemini Pro and Perplexity Pro.</p>
-        <a href="https://alexanderbacca.github.io/index.html" class="text-blue-400 hover:text-blue-300 transition-colors">← Return to Home</a>
+        <p id="footer-credit">Created by Alexander Bacca, Gemini Pro and Perplexity Pro.</p>
+        <a href="https://alexanderbacca.github.io/index.html" class="text-blue-400 hover:text-blue-300 transition-colors"><span id="home-link-text">← Return to Home</span></a>
     </footer>
 
     <script>
@@ -243,6 +247,126 @@
             }
         ];
 
+        // ─── PERSISTENT LOCALIZATION ──────────────────────────────────────────
+        const LANGUAGE_STORAGE_KEY = 'lunarGuideLanguage';
+        const uiText = {
+            en: {
+                pageTitle: 'Lunar Phases & Agriculture Guide',
+                appTitle: 'Lunar Cycle Guide',
+                appSubtitle: 'Master the Spanish translations of moon phases and traditional agricultural activities.',
+                todaysMoon: "Today's Moon",
+                phaseStarted: 'Phase started',
+                studyGuide: 'Study Guide',
+                quiz: 'Quiz',
+                matchGame: 'Match Game',
+                quizTitle: 'Knowledge Check',
+                scoreLabel: 'Score:',
+                nextQuestion: 'Next Question ➔',
+                quizComplete: 'Quiz Complete!',
+                finalScore: 'Final Score:',
+                retakeQuiz: 'Retake Quiz ↺',
+                matchTitle: 'Term Matcher',
+                matchInstructions: 'Match the English term (Left) with the Spanish term (Right)',
+                resetGame: 'Reset Game ↺',
+                perfectMatch: '🎉 Perfect Match! 🎉',
+                playAgain: 'Play Again',
+                associatedActivities: 'Associated Activities:',
+                languageToggle: 'Español',
+                languageToggleAria: 'Switch interface language to Spanish',
+                footerCredit: 'Created by Alexander Bacca, Gemini Pro and Perplexity Pro.',
+                returnHome: '← Return to Home',
+                quizSpanishTranslation: 'What is the Spanish translation for "{phase}"?',
+                quizEnglishTranslation: 'Which moon phase is "{phase}" in English?',
+                quizActivityPhase: 'Which moon phase is perfect for "{activity}"?'
+            },
+            es: {
+                pageTitle: 'Guía de Fases Lunares y Agricultura',
+                appTitle: 'Guía del Ciclo Lunar',
+                appSubtitle: 'Domina las fases de la luna y sus actividades agrícolas tradicionales en inglés y español.',
+                todaysMoon: 'Luna de Hoy',
+                phaseStarted: 'Inicio de la Fase',
+                studyGuide: 'Guía de Estudio',
+                quiz: 'Prueba',
+                matchGame: 'Juego de Parejas',
+                quizTitle: 'Comprobación de Conocimientos',
+                scoreLabel: 'Puntaje:',
+                nextQuestion: 'Siguiente Pregunta ➔',
+                quizComplete: '¡Prueba Completada!',
+                finalScore: 'Puntaje Final:',
+                retakeQuiz: 'Repetir Prueba ↺',
+                matchTitle: 'Combinador de Términos',
+                matchInstructions: 'Une el término en inglés (izquierda) con el término en español (derecha)',
+                resetGame: 'Reiniciar Juego ↺',
+                perfectMatch: '🎉 ¡Emparejamiento Perfecto! 🎉',
+                playAgain: 'Jugar de Nuevo',
+                associatedActivities: 'Actividades Asociadas:',
+                languageToggle: 'English',
+                languageToggleAria: 'Cambiar el idioma de la interfaz a inglés',
+                footerCredit: 'Creado por Alexander Bacca, Gemini Pro y Perplexity Pro.',
+                returnHome: '← Volver al Inicio',
+                quizSpanishTranslation: '¿Cuál es la traducción al español de "{phase}"?',
+                quizEnglishTranslation: '¿Qué fase lunar es "{phase}" en inglés?',
+                quizActivityPhase: '¿Qué fase lunar es perfecta para "{activity}"?'
+            }
+        };
+
+        function getStoredLanguage() {
+            return localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'es' ? 'es' : 'en';
+        }
+
+        let currentLanguage = getStoredLanguage();
+
+        function translate(key, values = {}) {
+            const template = uiText[currentLanguage][key] || uiText.en[key] || key;
+            return template.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+        }
+
+        function setLocalizedText(id, key, values = {}) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = translate(key, values);
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLanguage;
+            document.title = translate('pageTitle');
+            setLocalizedText('app-title', 'appTitle');
+            setLocalizedText('app-subtitle', 'appSubtitle');
+            setLocalizedText('moon-today-label', 'todaysMoon');
+            setLocalizedText('moon-phase-start-label', 'phaseStarted');
+            setLocalizedText('btn-study', 'studyGuide');
+            setLocalizedText('btn-quiz', 'quiz');
+            setLocalizedText('btn-match', 'matchGame');
+            setLocalizedText('quiz-title', 'quizTitle');
+            setLocalizedText('quiz-score-label', 'scoreLabel');
+            setLocalizedText('next-btn', 'nextQuestion');
+            setLocalizedText('quiz-complete-title', 'quizComplete');
+            setLocalizedText('final-score-label', 'finalScore');
+            setLocalizedText('retake-quiz-btn', 'retakeQuiz');
+            setLocalizedText('match-title', 'matchTitle');
+            setLocalizedText('match-instructions', 'matchInstructions');
+            setLocalizedText('reset-match-btn', 'resetGame');
+            setLocalizedText('match-victory-title', 'perfectMatch');
+            setLocalizedText('play-again-btn', 'playAgain');
+            setLocalizedText('footer-credit', 'footerCredit');
+            setLocalizedText('home-link-text', 'returnHome');
+
+            const languageToggle = document.getElementById('language-toggle');
+            languageToggle.textContent = translate('languageToggle');
+            languageToggle.setAttribute('aria-label', translate('languageToggleAria'));
+            languageToggle.setAttribute('aria-pressed', currentLanguage === 'es');
+
+            renderStudyGuide();
+            computeMoonInfo();
+            if (quizQuestions.length > 0 && document.getElementById('quiz').classList.contains('active')) initQuiz();
+            if (document.getElementById('match-col-a').innerHTML !== '' && document.getElementById('match').classList.contains('active')) initMatchGame();
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLanguage);
+            applyLanguage();
+        }
+
         // ─── NAV ─────────────────────────────────────────────────────────────────
         function switchTab(tabId) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -263,12 +387,16 @@
             const grid = document.getElementById('study-grid');
             let html = '';
             lunarData.forEach(phase => {
+                const primaryPhase = currentLanguage === 'es' ? phase.phaseEs : phase.phaseEn;
+                const secondaryPhase = currentLanguage === 'es' ? phase.phaseEn : phase.phaseEs;
                 let activitiesHtml = '';
                 phase.activities.forEach(act => {
+                    const primaryActivity = currentLanguage === 'es' ? act.es : act.en;
+                    const secondaryActivity = currentLanguage === 'es' ? act.en : act.es;
                     activitiesHtml += `
                         <li class="mb-3 p-3 bg-slate-900 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-                            <span class="block text-slate-200 font-medium">${act.en}</span>
-                            <span class="block text-blue-300 text-sm italic">${act.es}</span>
+                            <span class="block text-slate-200 font-medium">${primaryActivity}</span>
+                            <span class="block text-blue-300 text-sm italic">${secondaryActivity}</span>
                         </li>`;
                 });
                 html += `
@@ -277,12 +405,12 @@
                         <div class="flex items-center gap-3 mb-4">
                             <span class="text-4xl drop-shadow-md">${phase.icon}</span>
                             <div>
-                                <h3 class="text-xl font-bold text-slate-100">${phase.phaseEn}</h3>
-                                <h4 class="text-md text-blue-400 font-medium">${phase.phaseEs}</h4>
+                                <h3 class="text-xl font-bold text-slate-100">${primaryPhase}</h3>
+                                <h4 class="text-md text-blue-400 font-medium">${secondaryPhase}</h4>
                             </div>
                         </div>
                         <div class="w-full h-px bg-slate-700 mb-4"></div>
-                        <h5 class="text-xs uppercase tracking-wider text-slate-400 mb-3 font-semibold">Associated Activities:</h5>
+                        <h5 class="text-xs uppercase tracking-wider text-slate-400 mb-3 font-semibold">${translate('associatedActivities')}</h5>
                         <ul class="space-y-2">${activitiesHtml}</ul>
                     </div>`;
             });
@@ -295,22 +423,24 @@
         function generateQuizPool() {
             let pool = [];
             lunarData.forEach(phase => {
-                pool.push({ q: `What is the Spanish translation for "${phase.phaseEn}"?`, a: phase.phaseEs, type: 'phase' });
-                pool.push({ q: `Which moon phase is "${phase.phaseEs}" in English?`,       a: phase.phaseEn, type: 'phaseEn' });
+                pool.push({ q: translate('quizSpanishTranslation', { phase: phase.phaseEn }), a: phase.phaseEs, answerLanguage: 'es' });
+                pool.push({ q: translate('quizEnglishTranslation', { phase: phase.phaseEs }), a: phase.phaseEn, answerLanguage: 'en' });
             });
             lunarData.forEach(phase => {
                 phase.activities.forEach(act => {
-                    pool.push({ q: `Which moon phase is perfect for "${act.en}"?`, a: phase.phaseEn, type: 'activity' });
+                    const activity = currentLanguage === 'es' ? act.es : act.en;
+                    const answer = currentLanguage === 'es' ? phase.phaseEs : phase.phaseEn;
+                    pool.push({ q: translate('quizActivityPhase', { activity }), a: answer, answerLanguage: currentLanguage });
                 });
             });
             return shuffleArray(pool).slice(0, 8);
         }
 
-        function getOptions(correctAnswer, type) {
+        function getOptions(correctAnswer, answerLanguage) {
             let options = new Set([correctAnswer]);
             while (options.size < 4) {
                 let r = lunarData[Math.floor(Math.random() * lunarData.length)];
-                options.add(type === 'phase' ? r.phaseEs : r.phaseEn);
+                options.add(answerLanguage === 'es' ? r.phaseEs : r.phaseEn);
             }
             return shuffleArray(Array.from(options));
         }
@@ -333,7 +463,7 @@
             document.getElementById('quiz-question').innerText = q.q;
             const container = document.getElementById('quiz-options');
             container.innerHTML = '';
-            getOptions(q.a, q.type).forEach(opt => {
+            getOptions(q.a, q.answerLanguage).forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 rounded-xl py-4 px-6 text-lg font-medium transition-all focus:outline-none shadow-sm flex items-center justify-center text-center min-h-[80px]';
                 btn.innerText = opt;
@@ -447,60 +577,53 @@
         }
 
         function formatNiceDate(date) {
-            return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const locale = currentLanguage === 'es' ? 'es-CO' : 'en-US';
+            return date.toLocaleDateString(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
         // ─── MOON PHASE MATH (4-PHASE VERSION) ──────────────────────────────────
         function computeMoonInfo() {
-            // Algorithm based on days since a known new moon and the synodic month ~29.530588853 days.[web:20][web:21]
             const LUNAR_CYCLE  = 29.530588853;
             const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
             const now          = new Date();
             const msPerDay     = 1000 * 60 * 60 * 24;
 
             const daysSinceKnownNewMoon = (now.getTime() - knownNewMoon.getTime()) / msPerDay;
-            let   cyclePositionDays     = daysSinceKnownNewMoon % LUNAR_CYCLE;
+            let cyclePositionDays = daysSinceKnownNewMoon % LUNAR_CYCLE;
             if (cyclePositionDays < 0) cyclePositionDays += LUNAR_CYCLE;
             const currentFraction = cyclePositionDays / LUNAR_CYCLE;
 
-            // Map to 4 phases only.
-            // 0.00–0.25  -> New Moon (🌑)
-            // 0.25–0.50  -> Waxing Moon (🌒)
-            // 0.50–0.75  -> Full Moon (🌕)
-            // 0.75–1.00  -> Waning Moon (🌘)[web:25][web:26]
             let currentPhase;
             if (currentFraction < 0.25) {
-                currentPhase = { name: 'New Moon',   emoji: '🌑', startFrac: 0.0 };
+                currentPhase = { id: 'new', emoji: '🌑', startFrac: 0.0 };
             } else if (currentFraction < 0.5) {
-                currentPhase = { name: 'Waxing Moon', emoji: '🌒', startFrac: 0.25 };
+                currentPhase = { id: 'waxing', emoji: '🌒', startFrac: 0.25 };
             } else if (currentFraction < 0.75) {
-                currentPhase = { name: 'Full Moon',   emoji: '🌕', startFrac: 0.5 };
+                currentPhase = { id: 'full', emoji: '🌕', startFrac: 0.5 };
             } else {
-                currentPhase = { name: 'Waning Moon', emoji: '🌘', startFrac: 0.75 };
+                currentPhase = { id: 'waning', emoji: '🌘', startFrac: 0.75 };
             }
 
-            // How many days into this 4-phase segment we are.
             const segmentLength = LUNAR_CYCLE / 4;
-            const segmentIndex  = Math.floor(currentFraction * 4);
+            const segmentIndex = Math.floor(currentFraction * 4);
             const segmentStartDays = segmentIndex * segmentLength;
-            const daysElapsed   = cyclePositionDays - segmentStartDays;
+            const daysElapsed = cyclePositionDays - segmentStartDays;
             const phaseStartDate = new Date(now.getTime() - daysElapsed * msPerDay);
-
-            const todayStr      = now.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            const locale = currentLanguage === 'es' ? 'es-CO' : 'en-US';
+            const todayStr = now.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' });
             const phaseStartStr = formatNiceDate(phaseStartDate);
+            const phaseData = lunarData.find(phase => phase.id === currentPhase.id);
+            const phaseName = currentLanguage === 'es' ? phaseData.phaseEs : phaseData.phaseEn;
 
-            // Final strings with spacing:
-            // "Today's Moon: 🌑 New Moon — Jun 15, 2026"
-            // "Phase started: Saturday, June 13, 2026"
-            document.getElementById('moon-today-line').textContent      = `Today's Moon: ${currentPhase.emoji} ${currentPhase.name} — ${todayStr}`;
-            document.getElementById('moon-phase-start-line').textContent = `Phase started: ${phaseStartStr}`;
+            document.getElementById('moon-today-line').textContent = `${currentPhase.emoji} ${phaseName} — ${todayStr}`;
+            document.getElementById('moon-phase-start-line').textContent = phaseStartStr;
         }
 
         // ─── INIT ────────────────────────────────────────────────────────────────
-        window.onload = () => {
-            renderStudyGuide();
-            computeMoonInfo();
-        };
+        window.addEventListener('DOMContentLoaded', () => {
+            currentLanguage = getStoredLanguage();
+            applyLanguage();
+        });
     </script>
 </body>
 </html>
